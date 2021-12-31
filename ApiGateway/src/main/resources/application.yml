@@ -1,0 +1,41 @@
+
+server:
+  port: 8085
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8089/eureka
+
+spring:
+  application:
+    name: service-gateway
+
+  cloud:
+    gateway:
+      routes:
+        - id: employee-service
+          uri: lb://employee-service
+          predicates:
+            - Path=/employee/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: employee-service
+                fallbackUri: forward:/faultToleranceForEmployeeService
+
+hystrix:
+  command:
+    fallbackcmd:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
+
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: hystrix.stream
