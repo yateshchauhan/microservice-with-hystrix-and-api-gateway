@@ -1,0 +1,10 @@
+Run ther server
+start other service.
+Run Api-gateway
+
+
+hystrix URL: http://localhost:8085/actuator/hystrix.stream
+
+Add this hystrix URL to following link
+
+http://localhost:9090/hystrix/
